@@ -3,7 +3,11 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useState } from "react";
 
 function App() {
-  const [items] = useState(["item0", "item1"]);
+  const [items] = useState([
+    { id: 0, text: "item0" },
+    { id: 1, text: "item1" },
+    { id: 2, text: "item2" },
+  ]);
   const onDragEnd = (result) => {
     const remove = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, remove[0]);
@@ -14,30 +18,20 @@ function App() {
         <Droppable droppableId="droppable">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              <Draggable key={0} draggableId="item0" index={0}>
-                {(provided) => (
-                  <div
-                    className="item"
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    {items[0]}
-                  </div>
-                )}
-              </Draggable>
-              <Draggable key={1} draggableId="item1" index={1}>
-                {(provided) => (
-                  <div
-                    className="item"
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    {items[1]}
-                  </div>
-                )}
-              </Draggable>
+              {items.map((item, index) => (
+                <Draggable draggableId={item.text} index={index} key={item.id}>
+                  {(provided) => (
+                    <div
+                      className="item"
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      {item.text}
+                    </div>
+                  )}
+                </Draggable>
+              ))}
               {provided.placeholder}
             </div>
           )}
